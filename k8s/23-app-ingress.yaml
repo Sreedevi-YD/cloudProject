@@ -1,0 +1,28 @@
+# Exposes the portal as a web endpoint (REST API + Swagger UI at /swagger-ui.html).
+# No separate frontend module was specified — Swagger UI is the browsable "webpage" entry point.
+# Point onboarding.example.com at your ingress controller's address and swap the TLS secret.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: onboarding-app
+  namespace: onboarding-portal
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "25m"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - onboarding.example.com
+      secretName: onboarding-app-tls
+  rules:
+    - host: onboarding.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: onboarding-app
+                port:
+                  number: 80

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST:sqlserver}:${DB_PORT:1433};databaseName=${DB_NAME:onboarding_portal};encrypt=true;trustServerCertificate=true
+
+app:
+  storage:
+    minio:
+      endpoint: http://${MINIO_HOST:minio}:${MINIO_PORT:9000}
+
+springdoc:
+  swagger-ui:
+    enabled: true

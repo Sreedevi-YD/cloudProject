@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onboarding-app-config
+  namespace: onboarding-portal
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  SERVER_PORT: "8080"
+  DB_HOST: "sqlserver"
+  DB_PORT: "1433"
+  DB_NAME: "onboarding_portal"
+  MINIO_HOST: "minio"
+  MINIO_PORT: "9000"
+  JWT_EXPIRATION_SECONDS: "3600"

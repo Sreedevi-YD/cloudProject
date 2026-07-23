@@ -1,0 +1,34 @@
+# AWS target-state profile. No source changes from on-prem — only endpoints/credentials move:
+#   - DB_URL points at an Amazon RDS for SQL Server (or SQL Server on EC2) instance;
+#     same mssql-jdbc driver, same Flyway migrations, same JPA entities.
+#   - MinIO's Java SDK is itself an S3-compatible client, so MINIO_ENDPOINT can be pointed
+#     directly at Amazon S3 (e.g. https://s3.<region>.amazonaws.com) with an IAM access key/secret;
+#     FileStoragePort and its adapter are unchanged.
+#   - In production on AWS, prefer injecting DB/JWT/MinIO secrets from AWS Secrets Manager via
+#     external-secrets/CSI driver into the same env vars, rather than checking values in here.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+
+app:
+  storage:
+    minio:
+      endpoint: ${MINIO_ENDPOINT}
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+      auto-create-buckets: false
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    root: WARN
+    com.enterprise.onboarding: INFO
