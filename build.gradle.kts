@@ -19,12 +19,6 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "io.spring.dependency-management")
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
-        }
-    }
-
     the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
         imports {
             mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
@@ -44,5 +38,9 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.add("-parameters")
+        // Targets Java 21 language/API level via cross-compilation (--release), without requiring
+        // Gradle to locate or auto-provision an exact JDK 21 — any JDK 21+ launching Gradle works,
+        // no toolchain resolution (and no Foojay plugin / plugin-portal access) needed.
+        options.release.set(21)
     }
 }
