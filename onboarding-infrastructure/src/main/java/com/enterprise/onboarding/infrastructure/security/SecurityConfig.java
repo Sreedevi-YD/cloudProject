@@ -35,6 +35,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // H2 console renders itself inside an iframe; the default X-Frame-Options: DENY
+                // would otherwise blank it out. sameOrigin (not disabling frame options entirely)
+                // keeps clickjacking protection everywhere else the app doesn't self-frame.
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(authorize -> authorize
@@ -50,6 +54,9 @@ public class SecurityConfig {
                         // "/swagger-ui.html" is springdoc's redirect entry point into "/swagger-ui/**";
                         // it doesn't match that pattern itself, so it needs listing separately.
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Only actually resolves under the "local" profile (H2ConsoleAutoConfiguration
+                        // is conditional on spring.h2.console.enabled); harmless 404 elsewhere.
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/v1/employees/**").hasAnyRole("ADMIN", "HR", "MANAGER")
                         .requestMatchers("/api/v1/onboarding-requests/**").hasAnyRole("ADMIN", "HR", "MANAGER")
                         .requestMatchers("/api/v1/documents/**").hasAnyRole("ADMIN", "HR", "EMPLOYEE")
