@@ -64,6 +64,10 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
       JWT_SECRET: ${JWT_SECRET:-change-this-signing-key-to-a-long-random-value-min-256-bits}
+      # Bootstraps one admin account on first run so the API/UI are usable immediately.
+      # Change the password (or disable this) once you've created your real admin accounts.
+      BOOTSTRAP_ADMIN_ENABLED: "true"
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-Admin@12345}
     ports:
       - "8080:8080"
     depends_on:

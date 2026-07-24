@@ -27,13 +27,13 @@ import java.util.UUID;
 public class AssetEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "onboarding_request_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "onboarding_request_id")
     private UUID onboardingRequestId;
 
-    @Column(name = "employee_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "employee_id")
     private UUID employeeId;
 
     @Enumerated(EnumType.STRING)
@@ -47,7 +47,7 @@ public class AssetEntity {
     @Column(name = "status", nullable = false, length = 30)
     private AssetStatus status;
 
-    @Column(name = "assigned_by_user_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "assigned_by_user_id")
     private UUID assignedByUserId;
 
     @Column(name = "assigned_at")

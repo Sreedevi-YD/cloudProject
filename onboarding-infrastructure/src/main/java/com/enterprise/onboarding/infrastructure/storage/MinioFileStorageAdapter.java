@@ -9,15 +9,18 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 
 /**
  * Implements {@link FileStoragePort} against MinIO. On AWS this is swapped for an S3 adapter
- * that satisfies the same port — no changes required in the application layer.
+ * that satisfies the same port — no changes required in the application layer. Excluded under
+ * "local" in favor of {@link LocalFileSystemStorageAdapter}, which needs no running server.
  */
 @Component
+@Profile("!local")
 @RequiredArgsConstructor
 @Slf4j
 public class MinioFileStorageAdapter implements FileStoragePort {

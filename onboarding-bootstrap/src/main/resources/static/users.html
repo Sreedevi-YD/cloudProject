@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Users — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Register a User</h1>
+    </div>
+
+    <div class="card" style="max-width: 480px;">
+        <p class="text-muted">Creates a login account with the selected roles. There's no user
+            listing yet (the API doesn't expose one) — keep track of who you've created.</p>
+        <div id="alert"></div>
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input id="username" required>
+
+            <label for="email">Email</label>
+            <input id="email" type="email" required>
+
+            <label for="password">Temporary password</label>
+            <input id="password" type="password" minlength="8" required>
+
+            <label>Roles</label>
+            <div style="margin-bottom: 14px;">
+                <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400; margin-right:16px;">
+                    <input type="checkbox" value="ROLE_ADMIN" class="role-checkbox" style="width:auto; margin:0;"> Admin
+                </label>
+                <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400; margin-right:16px;">
+                    <input type="checkbox" value="ROLE_HR" class="role-checkbox" style="width:auto; margin:0;"> HR
+                </label>
+                <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400; margin-right:16px;">
+                    <input type="checkbox" value="ROLE_MANAGER" class="role-checkbox" style="width:auto; margin:0;"> Manager
+                </label>
+                <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400; margin-right:16px;">
+                    <input type="checkbox" value="ROLE_IT" class="role-checkbox" style="width:auto; margin:0;"> IT
+                </label>
+                <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400;">
+                    <input type="checkbox" value="ROLE_EMPLOYEE" class="role-checkbox" style="width:auto; margin:0;"> Employee
+                </label>
+            </div>
+
+            <label for="employeeId">Linked employee ID (optional)</label>
+            <input id="employeeId" placeholder="UUID — copy from the Employees page">
+
+            <button type="submit" id="registerBtn">Create user</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/users.js"></script>
+</body>
+</html>

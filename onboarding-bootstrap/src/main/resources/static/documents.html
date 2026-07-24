@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Documents — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Documents for this Onboarding Request</h1>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <h2>Upload a document</h2>
+        <form id="uploadForm">
+            <div class="form-row">
+                <div>
+                    <label for="employeeId">Employee ID</label>
+                    <input id="employeeId" placeholder="UUID — copy from the Employees page" required>
+                </div>
+                <div>
+                    <label for="documentType">Document type</label>
+                    <select id="documentType" required>
+                        <option value="RESUME">Resume</option>
+                        <option value="PASSPORT">Passport</option>
+                        <option value="PAN">PAN</option>
+                        <option value="AADHAAR">Aadhaar</option>
+                        <option value="EDUCATIONAL_CERTIFICATE">Educational certificate</option>
+                        <option value="OFFER_LETTER">Offer letter</option>
+                    </select>
+                </div>
+            </div>
+            <label for="fileInput">File</label>
+            <input id="fileInput" type="file" required>
+            <button type="submit" id="uploadBtn">Upload</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Uploaded documents</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>File name</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Uploaded at</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="documentsBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No documents uploaded yet.</div>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/documents.js"></script>
+</body>
+</html>

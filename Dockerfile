@@ -1,17 +1,17 @@
 # --- Build stage -------------------------------------------------------
-# Uses the official Gradle image directly (no committed wrapper jar needed for the build).
-# If you generate ./gradlew locally (gradle wrapper) you can switch this to eclipse-temurin
-# + ./gradlew for reproducible offline builds; functionally equivalent.
-FROM gradle:8.11-jdk21 AS build
+# Uses the committed Gradle wrapper (pinned to 8.11), same as CI and local dev.
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
 
-COPY settings.gradle.kts build.gradle.kts ./
+COPY gradlew ./
 COPY gradle ./gradle
+COPY settings.gradle.kts build.gradle.kts ./
 COPY onboarding-domain/build.gradle.kts onboarding-domain/build.gradle.kts
 COPY onboarding-application/build.gradle.kts onboarding-application/build.gradle.kts
 COPY onboarding-infrastructure/build.gradle.kts onboarding-infrastructure/build.gradle.kts
 COPY onboarding-presentation/build.gradle.kts onboarding-presentation/build.gradle.kts
 COPY onboarding-bootstrap/build.gradle.kts onboarding-bootstrap/build.gradle.kts
+RUN chmod +x gradlew
 
 COPY onboarding-domain onboarding-domain
 COPY onboarding-application onboarding-application
@@ -19,7 +19,7 @@ COPY onboarding-infrastructure onboarding-infrastructure
 COPY onboarding-presentation onboarding-presentation
 COPY onboarding-bootstrap onboarding-bootstrap
 
-RUN gradle :onboarding-bootstrap:bootJar --no-daemon -x test
+RUN ./gradlew :onboarding-bootstrap:bootJar --no-daemon -x test
 
 # --- Runtime stage -------------------------------------------------------
 FROM eclipse-temurin:21-jre AS runtime

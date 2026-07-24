@@ -11,3 +11,10 @@ HELP.md
 !gradle/wrapper/gradle-wrapper.properties
 .env
 *.log
+
+# local profile runtime artifacts (H2 db file, uploaded documents) — not anchored to root,
+# since running bootRun from a submodule resolves the relative path under that submodule.
+data/
+*.mv.db
+*.trace.db
+*.lock.db

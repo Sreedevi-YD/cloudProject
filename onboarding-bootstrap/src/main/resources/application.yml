@@ -41,6 +41,13 @@ app:
       secret: ${JWT_SECRET:change-this-signing-key-to-a-long-random-value-min-256-bits}
       expiration-seconds: ${JWT_EXPIRATION_SECONDS:3600}
       issuer: employee-onboarding-portal
+    # /api/v1/auth/register is admin-only, so this is how the very first admin account gets
+    # created. Disabled by default; dev/local turn it on with known throwaway credentials.
+    bootstrap-admin:
+      enabled: ${BOOTSTRAP_ADMIN_ENABLED:false}
+      username: ${BOOTSTRAP_ADMIN_USERNAME:admin}
+      email: ${BOOTSTRAP_ADMIN_EMAIL:admin@example.com}
+      password: ${BOOTSTRAP_ADMIN_PASSWORD:changeMe_On_First_Run!}
   storage:
     minio:
       endpoint: ${MINIO_ENDPOINT:http://localhost:9000}

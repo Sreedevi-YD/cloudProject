@@ -2,6 +2,12 @@ spring:
   jpa:
     show-sql: true
 
+app:
+  security:
+    bootstrap-admin:
+      enabled: true
+      password: Admin@12345
+
 logging:
   level:
     org.hibernate.SQL: DEBUG

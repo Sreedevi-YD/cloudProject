@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assets — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Assets for this Onboarding Request</h1>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <h2>Assign an asset</h2>
+        <form id="assignForm">
+            <div class="form-row">
+                <div>
+                    <label for="employeeId">Employee ID</label>
+                    <input id="employeeId" placeholder="UUID — copy from the Employees page" required>
+                </div>
+                <div>
+                    <label for="assetType">Asset type</label>
+                    <select id="assetType" required>
+                        <option value="LAPTOP">Laptop</option>
+                        <option value="MONITOR">Monitor</option>
+                        <option value="MOBILE">Mobile</option>
+                        <option value="VPN_ACCESS">VPN access</option>
+                        <option value="EMAIL_ACCOUNT">Email account</option>
+                    </select>
+                </div>
+            </div>
+            <label for="assetTag">Asset tag</label>
+            <input id="assetTag" placeholder="e.g. asset serial / account identifier" required>
+            <button type="submit" id="assignBtn">Assign</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Assigned assets</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Tag</th>
+                <th>Status</th>
+                <th>Assigned at</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="assetsBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No assets assigned yet.</div>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/assets.js"></script>
+</body>
+</html>

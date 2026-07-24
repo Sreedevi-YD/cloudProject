@@ -24,7 +24,7 @@ import java.util.UUID;
 public class EmployeeEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "employee_code", nullable = false, unique = true, length = 40)
@@ -51,7 +51,7 @@ public class EmployeeEntity {
     @Column(name = "department", length = 100)
     private String department;
 
-    @Column(name = "manager_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "manager_id")
     private UUID managerId;
 
     @Column(name = "date_of_joining")

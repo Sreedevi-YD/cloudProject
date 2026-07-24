@@ -10,7 +10,7 @@ import java.util.UUID;
 public record CreateEmployeeRequest(
         @NotBlank String firstName,
         @NotBlank String lastName,
-        @NotBlank @Email String personalEmail,
+        @Email String personalEmail,
         @NotBlank @Email String workEmail,
         String phoneNumber,
         @NotBlank String designation,

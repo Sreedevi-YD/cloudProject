@@ -1,0 +1,38 @@
+# Disk/Docker-free profile: no SQL Server, no MinIO, no containers at all.
+# Just `java -jar app.jar` (or `gradle bootRun`) with `--spring.profiles.active=local`.
+# Data persists in a local H2 file under ./data so it survives restarts.
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/onboarding-db;AUTO_SERVER=TRUE
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # Flyway migrations are SQL Server-specific (UNIQUEIDENTIFIER, SYSUTCDATETIME()); Hibernate
+  # generates the H2 schema itself via ddl-auto instead.
+  flyway:
+    enabled: false
+
+app:
+  security:
+    bootstrap-admin:
+      enabled: true
+      password: Admin@12345
+  storage:
+    local:
+      base-path: ./data/documents
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

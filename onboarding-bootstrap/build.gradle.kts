@@ -14,6 +14,9 @@ dependencies {
 
     implementation(libs.spring.boot.starter.actuator)
     annotationProcessor(libs.spring.boot.configuration.processor)
+
+    // Only pulled in for the disk/Docker-free "local" profile (H2 instead of SQL Server).
+    runtimeOnly(libs.h2)
 }
 
 tasks.named<BootJar>("bootJar") {

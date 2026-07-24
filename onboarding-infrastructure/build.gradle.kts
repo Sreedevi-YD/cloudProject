@@ -8,6 +8,13 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.aop)
 
+    // JwtAuthenticationFilter/JwtAuthenticationEntryPoint use jakarta.servlet.* directly;
+    // this module has no starter-web dependency to bring that in transitively.
+    compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    // @Slf4j-annotated adapters need slf4j-api resolvable at compile time for Lombok to
+    // generate the `log` field.
+    compileOnly("org.slf4j:slf4j-api")
+
     implementation(libs.mssql.jdbc)
     implementation(libs.flyway.core)
     implementation(libs.flyway.sqlserver)

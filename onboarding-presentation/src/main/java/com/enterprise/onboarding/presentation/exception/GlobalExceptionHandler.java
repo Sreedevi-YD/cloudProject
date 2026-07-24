@@ -4,10 +4,12 @@ import com.enterprise.onboarding.application.exception.InvalidCredentialsExcepti
 import com.enterprise.onboarding.domain.exception.DomainException;
 import com.enterprise.onboarding.domain.exception.InvalidStateTransitionException;
 import com.enterprise.onboarding.domain.exception.ResourceNotFoundException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,6 +65,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiError.of(400, "Bad Request", ex.getMessage()));
+    }
+
+    /**
+     * Catches malformed JSON bodies before they reach the generic 500 handler — most commonly a
+     * field typed as UUID (e.g. {@code managerId}) receiving a non-UUID string like "123".
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleMalformedRequest(HttpMessageNotReadableException ex) {
+        String message = "Malformed request body";
+        if (ex.getCause() instanceof InvalidFormatException ife && !ife.getPath().isEmpty()) {
+            String field = ife.getPath().get(ife.getPath().size() - 1).getFieldName();
+            message = "Invalid value \"%s\" for field \"%s\": expected a valid %s"
+                    .formatted(ife.getValue(), field, ife.getTargetType().getSimpleName());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiError.of(400, "Bad Request", message));
     }
 
     @ExceptionHandler(Exception.class)

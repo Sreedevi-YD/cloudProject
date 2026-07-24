@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Employees — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Employees</h1>
+        <button id="newEmployeeBtn">+ New Employee</button>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <div class="toolbar">
+            <input id="searchInput" placeholder="Search name, code, email, department…">
+            <button class="secondary small" id="searchBtn">Search</button>
+            <div class="spacer"></div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Code</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Joining date</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="employeesBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No employees found.</div>
+
+        <div class="pagination">
+            <button class="secondary small" id="prevPageBtn">Prev</button>
+            <span class="text-muted" id="pageInfo"></span>
+            <button class="secondary small" id="nextPageBtn">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create/edit employee modal -->
+<div class="modal-backdrop" id="employeeModal" style="display:none;">
+    <div class="modal">
+        <h2 id="employeeModalTitle">New Employee</h2>
+        <div id="employeeAlert"></div>
+        <form id="employeeForm">
+            <div class="form-row">
+                <div>
+                    <label for="firstName">First name</label>
+                    <input id="firstName" required>
+                </div>
+                <div>
+                    <label for="lastName">Last name</label>
+                    <input id="lastName" required>
+                </div>
+            </div>
+
+            <label for="workEmail">Work email</label>
+            <input id="workEmail" type="email" required>
+
+            <label for="personalEmail">Personal email</label>
+            <input id="personalEmail" type="email">
+
+            <div class="form-row">
+                <div>
+                    <label for="phoneNumber">Phone number</label>
+                    <input id="phoneNumber">
+                </div>
+                <div>
+                    <label for="managerId">Manager user ID</label>
+                    <input id="managerId" placeholder="Optional UUID">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="designation">Designation</label>
+                    <input id="designation" required>
+                </div>
+                <div>
+                    <label for="department">Department</label>
+                    <input id="department" required>
+                </div>
+            </div>
+
+            <div id="dateOfJoiningWrap">
+                <label for="dateOfJoining">Date of joining</label>
+                <input id="dateOfJoining" type="date" required>
+            </div>
+
+            <div id="activeWrap" style="display:none;">
+                <label for="activeSelect">Active</label>
+                <select id="activeSelect">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="secondary" id="cancelEmployeeBtn">Cancel</button>
+                <button type="submit" id="employeeSubmitBtn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/employees.js"></script>
+</body>
+</html>

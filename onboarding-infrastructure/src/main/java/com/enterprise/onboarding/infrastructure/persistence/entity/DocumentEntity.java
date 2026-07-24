@@ -26,13 +26,13 @@ import java.util.UUID;
 public class DocumentEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "onboarding_request_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "onboarding_request_id")
     private UUID onboardingRequestId;
 
-    @Column(name = "employee_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "employee_id")
     private UUID employeeId;
 
     @Enumerated(EnumType.STRING)
@@ -57,7 +57,7 @@ public class DocumentEntity {
     @Column(name = "checksum", length = 100)
     private String checksum;
 
-    @Column(name = "uploaded_by_user_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "uploaded_by_user_id")
     private UUID uploadedByUserId;
 
     @Column(name = "uploaded_at", nullable = false)

@@ -27,7 +27,7 @@ import java.util.UUID;
 public class OnboardingRequestEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "candidate_name", nullable = false, length = 200)
@@ -45,13 +45,13 @@ public class OnboardingRequestEntity {
     @Column(name = "proposed_joining_date")
     private LocalDate proposedJoiningDate;
 
-    @Column(name = "created_by_user_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "created_by_user_id")
     private UUID createdByUserId;
 
-    @Column(name = "hiring_manager_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "hiring_manager_id")
     private UUID hiringManagerId;
 
-    @Column(name = "employee_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "employee_id")
     private UUID employeeId;
 
     @Enumerated(EnumType.STRING)

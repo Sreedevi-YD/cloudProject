@@ -38,9 +38,18 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        // User provisioning is admin-only — self-registration would let anyone
+                        // mint themselves a ROLE_ADMIN account otherwise.
+                        .requestMatchers("/api/v1/auth/register").hasRole("ADMIN")
                         .requestMatchers("/actuator/health/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Static UI shell: plain HTML/CSS/JS served from resources/static, calling
+                        // the API below with a JWT the browser holds client-side. The pages are
+                        // public; every API call they make is still enforced by the rules below.
+                        .requestMatchers("/", "/*.html", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                        // "/swagger-ui.html" is springdoc's redirect entry point into "/swagger-ui/**";
+                        // it doesn't match that pattern itself, so it needs listing separately.
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/v1/employees/**").hasAnyRole("ADMIN", "HR", "MANAGER")
                         .requestMatchers("/api/v1/onboarding-requests/**").hasAnyRole("ADMIN", "HR", "MANAGER")
                         .requestMatchers("/api/v1/documents/**").hasAnyRole("ADMIN", "HR", "EMPLOYEE")

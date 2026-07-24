@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tasks — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1 id="pageTitle">Task Dashboard</h1>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <div class="toolbar" id="filterToolbar">
+            <select id="departmentFilter">
+                <option value="">All departments</option>
+                <option value="HR">HR</option>
+                <option value="IT">IT</option>
+                <option value="MANAGER">Manager</option>
+                <option value="EMPLOYEE">Employee</option>
+            </select>
+            <button class="secondary small" id="filterBtn">Filter</button>
+            <div class="spacer"></div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="tasksBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No tasks found.</div>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/tasks.js"></script>
+</body>
+</html>

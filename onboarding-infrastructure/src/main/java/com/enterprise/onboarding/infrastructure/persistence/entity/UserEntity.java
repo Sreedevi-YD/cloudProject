@@ -31,7 +31,7 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "username", nullable = false, unique = true, length = 100)
@@ -53,7 +53,7 @@ public class UserEntity {
     @Builder.Default
     private Set<RoleName> roles = new HashSet<>();
 
-    @Column(name = "employee_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "employee_id")
     private UUID employeeId;
 
     @Column(name = "created_at", nullable = false)

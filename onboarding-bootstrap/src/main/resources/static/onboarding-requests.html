@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Onboarding Requests — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Onboarding Requests</h1>
+        <button id="newRequestBtn">+ New Request</button>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <div class="toolbar">
+            <input id="searchInput" placeholder="Search candidate, department…">
+            <select id="statusFilter">
+                <option value="">All statuses</option>
+                <option value="PENDING_APPROVAL">Pending approval</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="DOCUMENTS_PENDING">Documents pending</option>
+                <option value="ASSET_PROVISIONING">Asset provisioning</option>
+                <option value="TASKS_IN_PROGRESS">Tasks in progress</option>
+                <option value="COMPLETED">Completed</option>
+            </select>
+            <button class="secondary small" id="searchBtn">Search</button>
+            <div class="spacer"></div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Candidate</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Joining date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="requestsBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No onboarding requests found.</div>
+
+        <div class="pagination">
+            <button class="secondary small" id="prevPageBtn">Prev</button>
+            <span class="text-muted" id="pageInfo"></span>
+            <button class="secondary small" id="nextPageBtn">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create request modal -->
+<div class="modal-backdrop" id="createModal" style="display:none;">
+    <div class="modal">
+        <h2>New Onboarding Request</h2>
+        <div id="createAlert"></div>
+        <form id="createForm">
+            <label for="candidateName">Candidate name</label>
+            <input id="candidateName" required>
+
+            <label for="candidateEmail">Candidate email</label>
+            <input id="candidateEmail" type="email" required>
+
+            <div class="form-row">
+                <div>
+                    <label for="designation">Designation</label>
+                    <input id="designation" required>
+                </div>
+                <div>
+                    <label for="department">Department</label>
+                    <input id="department" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="proposedJoiningDate">Proposed joining date</label>
+                    <input id="proposedJoiningDate" type="date" required>
+                </div>
+                <div>
+                    <label for="hiringManagerId">Hiring manager user ID</label>
+                    <input id="hiringManagerId" placeholder="UUID of the manager's user account" required>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="secondary" id="cancelCreateBtn">Cancel</button>
+                <button type="submit" id="createSubmitBtn">Create request</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Reject reason modal -->
+<div class="modal-backdrop" id="rejectModal" style="display:none;">
+    <div class="modal">
+        <h2>Reject Request</h2>
+        <form id="rejectForm">
+            <label for="rejectReason">Reason</label>
+            <textarea id="rejectReason" rows="3" required></textarea>
+            <div class="modal-actions">
+                <button type="button" class="secondary" id="cancelRejectBtn">Cancel</button>
+                <button type="submit" class="danger">Reject request</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/onboarding-requests.js"></script>
+</body>
+</html>

@@ -27,10 +27,10 @@ import java.util.UUID;
 public class OnboardingTaskEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "uniqueidentifier")
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "onboarding_request_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "onboarding_request_id")
     private UUID onboardingRequestId;
 
     @Column(name = "title", nullable = false, length = 200)
@@ -43,7 +43,7 @@ public class OnboardingTaskEntity {
     @Column(name = "owning_department", nullable = false, length = 30)
     private OwningDepartment owningDepartment;
 
-    @Column(name = "assigned_to_user_id", columnDefinition = "uniqueidentifier")
+    @Column(name = "assigned_to_user_id")
     private UUID assignedToUserId;
 
     @Enumerated(EnumType.STRING)

@@ -49,12 +49,35 @@ by JWT bearer tokens (`onboarding-infrastructure/.../security`).
 
 ## Running locally
 
-**Prerequisites:** JDK 21, Docker Desktop. Gradle is not vendored as a wrapper in this scaffold —
-either install Gradle 8.11+ locally and run `gradle wrapper` once to generate `gradlew`, or use
-the Docker build below, which pulls the official `gradle:8.11-jdk21` image and needs nothing
-installed beyond Docker.
+The Gradle wrapper (`gradlew`/`gradlew.bat`) is committed, so the only thing you need installed
+is a **JDK 21** ([Temurin](https://adoptium.net/temurin/releases/?version=21) is a good pick) —
+the wrapper downloads Gradle 8.11 itself on first run (~130MB, once, cached in
+`~/.gradle/wrapper`).
 
-### Full stack via Docker Compose (SQL Server + MinIO + app)
+### Option A — no Docker, no SQL Server, no MinIO (`local` profile)
+
+For machines tight on disk space: this profile swaps SQL Server for an embedded **H2** file
+database and MinIO for **plain local-disk file storage** — nothing to install or run besides the
+JDK. See `onboarding-bootstrap/src/main/resources/application-local.yml`; the swap is done via
+Spring profiles (`LocalFileSystemStorageAdapter` replaces `MinioFileStorageAdapter`, Hibernate's
+`ddl-auto: update` replaces the SQL-Server-specific Flyway migration), so no other code changes.
+
+```powershell
+.\gradlew.bat bootRun --args="--spring.profiles.active=local"
+```
+
+- App: http://localhost:8080/swagger-ui.html
+- A default admin (`admin` / `Admin@12345`) is seeded automatically by `DevDataSeeder` under this
+  profile — **remove or gate this behind a stronger mechanism before any shared/prod use.**
+- Data persists in `./data/onboarding-db.mv.db` and uploaded documents under `./data/documents/`
+  between runs (both gitignored). Delete `./data/` to reset to a clean slate.
+- H2's web console is available at http://localhost:8080/h2-console (JDBC URL
+  `jdbc:h2:file:./data/onboarding-db`, user `sa`, blank password) if you want to poke at the data.
+
+### Option B — full stack via Docker Compose (SQL Server + MinIO + app)
+
+Requires Docker Desktop (several GB of disk for the app + WSL2 backend + the SQL Server/MinIO
+images) — this is the option that matches production (real SQL Server + real MinIO):
 
 ```bash
 docker compose up --build
@@ -62,14 +85,15 @@ docker compose up --build
 
 - App: http://localhost:8080 (Swagger UI: `/swagger-ui.html`)
 - MinIO console: http://localhost:9001 (minioadmin/minioadmin by default)
-- A default `dev`-profile admin user (`admin` / `Admin@12345`) is seeded automatically by
-  `DevDataSeeder` — **remove or gate this behind a stronger mechanism before any shared/prod use.**
+- `docker-compose.yml` sets `BOOTSTRAP_ADMIN_ENABLED=true`, so an `admin` account is created on
+  first run the same way it is under `dev`/`local` (see the CI/CD section's note on
+  `BOOTSTRAP_ADMIN_*` for the equivalent in Kubernetes/AWS).
 
 ### Build the jar directly
 
-```bash
-gradle :onboarding-bootstrap:bootJar
-java -jar onboarding-bootstrap/build/libs/employee-onboarding-portal.jar
+```powershell
+.\gradlew.bat :onboarding-bootstrap:bootJar
+java -jar onboarding-bootstrap\build\libs\employee-onboarding-portal.jar --spring.profiles.active=local
 ```
 
 ## Kubernetes (on-prem)
@@ -119,8 +143,8 @@ The two external dependencies are abstracted behind ports for exactly this reaso
 
 Two workflows live in `.github/workflows/`:
 
-- **`ci.yml`** — runs on every push/PR to `main`/`develop`: provisions Gradle 8.11 (no wrapper is
-  committed to this repo) and runs `gradle build` across all modules.
+- **`ci.yml`** — runs on every push/PR to `main`/`develop`: sets up JDK 21 and runs `gradle build`
+  (via the committed wrapper) across all modules.
 - **`cd.yml`** — runs on every push to `main`: repeats the build/test, builds the Docker image and
   pushes it to GHCR (`ghcr.io/<owner>/<repo>`, authenticated with the built-in `GITHUB_TOKEN` — no
   registry secret needed), then applies `k8s/` and rolls the deployment to the new image via
@@ -177,13 +201,21 @@ docker/sqlserver/init-db.sql     # creates the onboarding_portal database on a f
 k8s/                             # kustomize-able manifest set
 ```
 
+## Bootstrapping the first admin account
+
+`POST /api/v1/auth/register` requires `ROLE_ADMIN` — otherwise anyone could mint themselves an
+admin account. That means the very first admin has to come from somewhere else:
+`AdminBootstrapSeeder` (`onboarding-bootstrap/.../config`) creates one on startup if
+`app.security.bootstrap-admin.enabled` is true and no user with that username exists yet.
+`dev`/`local` enable it by default with throwaway credentials; every other profile defaults to
+disabled — for a real environment, set `BOOTSTRAP_ADMIN_ENABLED=true` plus
+`BOOTSTRAP_ADMIN_USERNAME`/`BOOTSTRAP_ADMIN_PASSWORD` for the first deploy only, then turn it back
+off (it's idempotent either way — it just checks whether that username already exists).
+
 ## Known gaps / next steps
 
-- `POST /api/v1/auth/register` is currently `permitAll` alongside `/login` for scaffold
-  convenience; in a real deployment, restrict user creation to `ROLE_ADMIN` (or a separate
-  provisioning flow) once the default admin exists.
-- No frontend module is included — the spec listed REST APIs only. Swagger UI
-  (`/swagger-ui.html`) is the browsable entry point; a separate SPA can consume the same API.
+- No dedicated user-management UI beyond the admin-only "register a user" form — no listing,
+  editing, deactivating, or role changes for existing users (the API doesn't expose them either).
 - Email delivery is not implemented; `NotificationPort` is ready for an SMTP or SES adapter.
 - Integration tests are not included; `onboarding-infrastructure` already pulls in Testcontainers
   (`mssqlserver` module) for when they're added.

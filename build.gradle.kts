@@ -14,7 +14,9 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
+    // java-library (not plain java) so the `api(...)` configuration used to expose
+    // domain/application types transitively between modules is actually available.
+    apply(plugin = "java-library")
     apply(plugin = "io.spring.dependency-management")
 
     java {

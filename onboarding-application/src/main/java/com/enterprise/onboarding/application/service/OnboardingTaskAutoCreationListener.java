@@ -6,6 +6,8 @@ import com.enterprise.onboarding.domain.model.OwningDepartment;
 import com.enterprise.onboarding.domain.model.TaskStatus;
 import com.enterprise.onboarding.domain.repository.OnboardingTaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -17,6 +19,12 @@ import java.util.UUID;
  * Functional requirement 6: tasks are auto-created the moment a request is approved,
  * fanned out to the departments that must act (IT provisioning, HR orientation).
  * Runs AFTER_COMMIT so tasks are never created for an approval that later rolls back.
+ *
+ * <p>REQUIRES_NEW is essential here, not decorative: at AFTER_COMMIT time the original
+ * transaction's JPA resources are still bound to the thread (Spring unbinds them only after
+ * firing this callback). Without REQUIRES_NEW, saveAll() silently joins that already-committed
+ * transaction instead of opening a fresh one — the inserts get buffered into a persistence
+ * context nothing will ever flush, so no rows are written and no exception is thrown either.
  */
 @org.springframework.stereotype.Component
 @RequiredArgsConstructor
@@ -25,6 +33,7 @@ public class OnboardingTaskAutoCreationListener {
     private final OnboardingTaskRepository onboardingTaskRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApproved(OnboardingApprovedEvent event) {
         Instant now = Instant.now();
         UUID requestId = event.onboardingRequestId();

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Audit Logs — Employee Onboarding Portal</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="navbar" id="navbar"></div>
+
+<div class="page">
+    <div class="page-header">
+        <h1>Audit Logs</h1>
+    </div>
+
+    <div id="alert"></div>
+
+    <div class="card">
+        <div class="toolbar">
+            <select id="entityTypeFilter">
+                <option value="">Look up by entity…</option>
+                <option value="Employee">Employee</option>
+                <option value="OnboardingRequest">OnboardingRequest</option>
+                <option value="Document">Document</option>
+                <option value="Asset">Asset</option>
+                <option value="OnboardingTask">OnboardingTask</option>
+            </select>
+            <input id="entityIdFilter" placeholder="Entity ID (UUID)">
+            <button class="secondary small" id="lookupBtn">Look up</button>
+            <button class="secondary small" id="clearLookupBtn">Clear</button>
+            <div class="spacer"></div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Entity type</th>
+                <th>Entity ID</th>
+                <th>Action</th>
+                <th>Performed by (user ID)</th>
+                <th>Occurred at</th>
+                <th>Details</th>
+            </tr>
+            </thead>
+            <tbody id="logsBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display:none;">No audit log entries found.</div>
+
+        <div class="pagination" id="paginationControls">
+            <button class="secondary small" id="prevPageBtn">Prev</button>
+            <span class="text-muted" id="pageInfo"></span>
+            <button class="secondary small" id="nextPageBtn">Next</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/audit-logs.js"></script>
+</body>
+</html>

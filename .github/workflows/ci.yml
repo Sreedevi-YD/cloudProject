@@ -20,16 +20,14 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      # No gradlew is committed to this repo, so Gradle itself is provisioned here
-      # (mirrors the Dockerfile, which uses the gradle:8.11-jdk21 build image directly).
+      # Detects and uses the committed gradlew wrapper automatically; adds build caching.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.11'
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build and test all modules
-        run: gradle build --no-daemon
+        run: ./gradlew build --no-daemon
 
       - name: Upload test reports
         if: failure()

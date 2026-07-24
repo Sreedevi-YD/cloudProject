@@ -32,6 +32,7 @@ jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 
 minio = { module = "io.minio:minio", version.ref = "minio" }
+h2 = { module = "com.h2database:h2" }
 mssql-jdbc = { module = "com.microsoft.sqlserver:mssql-jdbc", version.ref = "mssqlJdbc" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-sqlserver = { module = "org.flywaydb:flyway-sqlserver", version.ref = "flyway" }
