@@ -1,6 +1,9 @@
 .gradle/
 build/
-out/
+# Anchored to root: IntelliJ's default output folder is <project-root>/out/. An unanchored
+# "out/" here previously matched com/enterprise/onboarding/application/port/out/ too, silently
+# excluding that entire package from every commit since the first one.
+/out/
 *.class
 .idea/
 *.iml
