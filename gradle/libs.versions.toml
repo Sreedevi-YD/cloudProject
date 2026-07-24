@@ -40,6 +40,7 @@ springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-u
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 testcontainers-mssqlserver = { module = "org.testcontainers:mssqlserver", version.ref = "testcontainers" }
 
-[plugins]
-spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
+# No [plugins] section: the Spring Boot / dependency-management plugins are applied via the root
+# build.gradle.kts buildscript classpath instead of `plugins { id(...) }`, to avoid depending on
+# the Gradle Plugin Portal (see build.gradle.kts for why). springBoot/springDependencyManagement
+# above are still the source of truth for those versions — keep the buildscript block in sync.

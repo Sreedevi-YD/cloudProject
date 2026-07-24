@@ -1,7 +1,21 @@
+// Spring Boot's and Spring's Gradle plugins are resolved as plain Maven Central artifacts via
+// buildscript classpath, not the `plugins { id(...) }` DSL. That DSL always resolves through the
+// Gradle Plugin Portal (plugins.gradle.org) first, which some corporate networks block outright
+// even when Maven Central and GitHub are reachable — buildscript classpath sidesteps it entirely.
+// NOTE: keep these versions in sync with gradle/libs.versions.toml's springBoot /
+// springDependencyManagement entries; they can't be read from the version catalog this early.
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:3.3.5")
+        classpath("io.spring.gradle:dependency-management-plugin:1.1.6")
+    }
+}
+
 plugins {
     id("java")
-    alias(libs.plugins.spring.boot) apply false
-    alias(libs.plugins.spring.dependency.management) apply false
 }
 
 allprojects {

@@ -2,9 +2,10 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // The only module that produces a runnable artifact. Wires domain + application + infrastructure
 // + presentation together and owns environment configuration (application-*.yml).
-plugins {
-    alias(libs.plugins.spring.boot)
-}
+// Applied the legacy way (not `plugins { id(...) }`) since the plugin classpath comes from the
+// root buildscript block — see build.gradle.kts for why (Gradle Plugin Portal is blocked on some
+// corporate networks; this plugin's classes come from Maven Central instead).
+apply(plugin = "org.springframework.boot")
 
 dependencies {
     implementation(project(":onboarding-domain"))
